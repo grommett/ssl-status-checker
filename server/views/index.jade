@@ -1,0 +1,13 @@
+doctype html
+html
+  head
+    title!= title
+    link(type='text/css' rel='stylesheet' href='/css/app.css')
+    script(type='text/javascript').
+      var links=!{data}
+  body
+    h1 SSL Switch Status
+    div(id='mount')
+
+    script(type='text/javascript' src='/js/vendor/react-0.13.3.min.js')
+    script(type='text/javascript' src='/js/app.js')

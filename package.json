@@ -1,0 +1,31 @@
+{
+  "name": "mixed-content",
+  "version": "0.0.1",
+  "description": "Utility that tests for mixed content in HTML.",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "css": "mkdir -p ./server/public/css && stylus ./client/stylus/app.styl -o ./server/public/css",
+    "browserify": "mkdir -p ./server/public/js/ && browserify -t reactify ./client/js/app.js -o ./server/public/js/app.js",
+    "browserify:build": "mkdir -p ./server/public/js/ && browserify -t reactify ./client/js/app.js | uglifyjs > ./server/public/js/app.js -cm",
+    "js:vendor": "mkdir -p ./server/public/js/vendor && cp client/js/vendor/*.js ./server/public/js/vendor/",
+    "js": "npm run browserify && npm run js:vendor",
+    "js:build": "npm run browserify:build && npm run js:vendor"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "express": "^4.13.0",
+    "flux": "^2.0.3",
+    "jade": "^1.11.0",
+    "object-assign": "^3.0.0",
+    "qwest": "^1.7.0",
+    "tabletop": "^1.4.2"
+  },
+  "devDependencies": {
+    "browserify": "^10.2.4",
+    "reactify": "^1.1.1",
+    "stylus": "^0.51.1",
+    "uglifyjs": "^2.4.10"
+  }
+}

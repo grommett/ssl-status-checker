@@ -1,0 +1,81 @@
+.status-list {
+  padding: 0;
+  margin: 0;
+}
+.status-header {
+  text-align: center;
+  margin-bottom: 20px;
+}
+.status-item {
+  list-style-type: none;
+  padding: 20px;
+  margin: 0 0 20px 0;
+  transition: all 0.2s ease-out;
+}
+.status-item .details {
+  font-family: monospace;
+  font-size: 0.9em;
+  overflow: hidden;
+  transition: all 0.2s ease-out;
+}
+.status-item .details-hidden {
+  padding-top: 0px;
+  max-height: 0;
+}
+.status-item .details-visible {
+  padding-top: 20px;
+  max-height: 1000px;
+}
+.status-item.warning {
+  color: #8a6d3b;
+  background-color: #fcf8e3;
+  border-color: #faebcc;
+}
+.status-item.warning a {
+  color: #8a6d3b;
+}
+.status-item.warning button {
+  background-color: #8a6d3b;
+  color: #fff;
+}
+.status-item.passing {
+  color: #3c763d;
+  background-color: #dff0d8;
+  border-color: #d6e9c6;
+}
+.status-item.passing a {
+  color: #3c763d;
+}
+.status-item.failing {
+  color: #a94442;
+  background-color: #f2dede;
+  border-color: #ebccd1;
+}
+.status-item.failing a {
+  color: #a94442;
+}
+.status-item.failing button {
+  background-color: #a94442;
+  color: #fff;
+}
+.status-item.loading {
+  color: #31708f;
+  background-color: #d9edf7;
+  border-color: #bce8f1;
+}
+.status-item.loading a {
+  color: #31708f;
+}
+.status-item button {
+  cursor: pointer;
+  border: 0;
+  border-radius: 3px;
+  display: block;
+  margin-top: 7px;
+}
+.status-item button:focus {
+  outline: none;
+}
+body {
+  font-family: 'Open Sans', 'Helvetica Neue', 'Helvetica', Arial, Sans-Serif;
+}
