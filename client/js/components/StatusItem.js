@@ -13,20 +13,19 @@ var StatusItem = React.createClass({
   },
 
   render: function() {
-    var self = this;
     var report = this.props.report;
     return (
-      <li className={'status-item '+self._getClasses()}>
+      <li className={'status-item '+this._getClasses()}>
         <a target="_blank" href={this.props.link}>{this.props.link}</a>
         {this._reportStatusCode()}
         {this._getButton()}
-        {this._getList(report.failing)}
-        {this._getList(report.warnings)}
+        {this._getList(report.failing, 'Failing')}
+        {this._getList(report.warnings, 'Warnings')}
       </li>
     );
   },
 
-  _getList: function(list) {
+  _getList: function(list, header) {
     if(list.length === 0) return 
     var assetUrlList = list.map(function(url) {
       return (
@@ -35,6 +34,7 @@ var StatusItem = React.createClass({
     });
     return (
       <ol className={'asset-urls-list details '+this._getVisiblity()}>
+        {header}
         {assetUrlList}
       </ol>
     )

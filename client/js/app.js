@@ -38,5 +38,8 @@ Status = React.createClass({
   }
 })
 
+// Render the react componenets to the page
 React.render(<Status />, document.getElementById('mount'));
+
+// Start querying the api for pages statuses
 WebApi.query();

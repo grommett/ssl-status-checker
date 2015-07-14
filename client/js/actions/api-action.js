@@ -13,16 +13,7 @@ var APIActions = {
       action: 'api-response',
       data: data
     });
-  },
-
-  refresh: function(link) {
-    AppDispatcher.refreshLink({
-      action: 'refresh-link',
-      link: link
-    });
-  },
-
-
+  }
 };
 
 module.exports = APIActions;

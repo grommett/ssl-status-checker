@@ -25,13 +25,13 @@ app.get('/', function (req, res) {
 
 // API gives status for a given url
 app.get('/api/:url', function (req, res) {
-  //assetParser
   assetParser(req.params.url, function(link, data) {
     res.json({url: link, data: data});
   }, function(e) {
     res.json(e);
   })
 });
+
 
 module.exports = {
   start: function() {

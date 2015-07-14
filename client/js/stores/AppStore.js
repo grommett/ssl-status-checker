@@ -4,7 +4,7 @@ var objectAssign = require('object-assign');
 
 var pages = links.map(function(link) {
   return {
-    url: link.Page_URL,
+    url: link.url,
     report: {
       status: 'loading',
       warnings:[], 

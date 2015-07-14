@@ -14,16 +14,7 @@ var APIActions = {
       action: 'api-response',
       data: data
     });
-  },
-
-  refresh: function(link) {
-    AppDispatcher.refreshLink({
-      action: 'refresh-link',
-      link: link
-    });
-  },
-
-
+  }
 };
 
 module.exports = APIActions;
@@ -33,49 +24,46 @@ var endPoint = '/api/';
 var qwest = require('qwest');
 var apiActions = require('../actions/api-action');
 var que = require('../libs/que');
+var maxRequests = 100;
+var linkArr = []
 /*
  * The var links is global and is written to the page response from the server
  * after it's queried the Google spreadheet. Adds the links array values to the que.
 */
-links.map(function(link) {
-  console.log('adding: ', link);
-  que.add(link);
+links.forEach(function(link) {
+  linkArr.push(link.url);
 })
 
-/*
- * Recursive. Moves through the que pinging server api
- * until there are no more links in the que object.
- * Sends response data via an 'action' to the dispatcher.
- * @See ./actions/api-action
-*/
+
 function query() {
-  var queItem = que.next();
-  while(queItem) {
-    var url = queItem.url;
-    qwest.get(endPoint+encodeURIComponent(queItem.Page_URL))
-    .then(function(response) {
-      console.log('async url ', response.url);
-      apiActions.response({pageURL: response.url, report: response.data});
-    })
-    .catch(function(e, response) {
-      console.log('>> Error: ', e, '\nResponse: ', response);
-    })
-    queItem = que.next();
+  batchRequest();
+}
+
+/*
+ * Loop through the links array
+ * removing the first item in every iteration
+*/
+function batchRequest(){
+  // Use the lower value of items left in the link array or maxRequests
+  var total = (linkArr.length-1 > maxRequests) ? maxRequests : linkArr.length-1;
+  for(var i = 0; i<= total; i++) {
+    qwest.get(endPoint+encodeURIComponent(linkArr[0]))
+      .then(function(response) {
+        apiActions.response({pageURL: response.url, report: response.data});
+      })
+      .catch(function(e, response) {
+        console.log('>> Error: ', e, '\nResponse: ', response);
+      })
+    // Remove the head from the array
+    linkArr.shift();
   }
-  console.log('Done request!');
-  // var queItem = que.next();
-  // if(queItem) {
-  //   qwest.get(endPoint+encodeURIComponent(queItem.url))
-  //   .then(function(response) {
-  //     apiActions.response({pageURL: queItem.url, report: response});
-  //     query();
-  //   })
-  //   .catch(function(e, response) {
-  //     console.log('>> Error: ', e, '\nResponse: ', response);
-  //   })
-  // }else{
-  //   console.log('Done!');
-  // }
+
+  // Batch request again if there's anything left in the array
+  if(linkArr.length > 0) {
+    setTimeout(function() {
+      batchRequest();
+    }, 30*1000);
+  }
 }
 
 
@@ -130,7 +118,10 @@ Status = React.createClass({displayName: "Status",
   }
 })
 
+// Render the react componenets to the page
 React.render(React.createElement(Status, null), document.getElementById('mount'));
+
+// Start querying the api for pages statuses
 WebApi.query();
 
 },{"./api":2,"./components/StatusHeader":4,"./components/StatusItem":5,"./stores/AppStore":9}],4:[function(require,module,exports){
@@ -141,9 +132,9 @@ var StatusHeader = React.createClass({displayName: "StatusHeader",
       React.createElement("div", {className: "status-header"}, 
         "Checking Status for ", this.props.pages.length, " links.", 
         ' '+loaded + ' page(s) loaded. '+Math.floor((loaded/this.props.pages.length)*100)+'% loaded.', 
-        React.createElement("br", null), this._getPercent('passing')+'% passing.', 
-        React.createElement("br", null), this._getPercent('failing')+'% failing.', 
-        React.createElement("br", null), this._getPercent('warning')+'% warnings.'
+        React.createElement("br", null), this._getCount('passing')+' passing.', 
+        React.createElement("br", null), this._getCount('failing')+' failing.', 
+        React.createElement("br", null), this._getCount('warning')+' warnings.'
       )
     )
   },
@@ -158,12 +149,12 @@ var StatusHeader = React.createClass({displayName: "StatusHeader",
     return loadedPages.length;
   },
 
-  _getPercent : function(status) {
+  _getCount : function(status) {
     var matchingPages = this.props.pages.filter(function(page) {
       if(page.report.status === status) return true
       return false;
     })
-    return Math.floor((matchingPages.length/this.props.pages.length)*100);
+    return matchingPages.length;
   }
 });
 
@@ -185,20 +176,19 @@ var StatusItem = React.createClass({displayName: "StatusItem",
   },
 
   render: function() {
-    var self = this;
     var report = this.props.report;
     return (
-      React.createElement("li", {className: 'status-item '+self._getClasses()}, 
+      React.createElement("li", {className: 'status-item '+this._getClasses()}, 
         React.createElement("a", {target: "_blank", href: this.props.link}, this.props.link), 
         this._reportStatusCode(), 
         this._getButton(), 
-        this._getList(report.failing), 
-        this._getList(report.warnings)
+        this._getList(report.failing, 'Failing'), 
+        this._getList(report.warnings, 'Warnings')
       )
     );
   },
 
-  _getList: function(list) {
+  _getList: function(list, header) {
     if(list.length === 0) return 
     var assetUrlList = list.map(function(url) {
       return (
@@ -207,6 +197,7 @@ var StatusItem = React.createClass({displayName: "StatusItem",
     });
     return (
       React.createElement("ol", {className: 'asset-urls-list details '+this._getVisiblity()}, 
+        header, 
         assetUrlList
       )
     )
@@ -341,7 +332,7 @@ var objectAssign = require('object-assign');
 
 var pages = links.map(function(link) {
   return {
-    url: link.Page_URL,
+    url: link.url,
     report: {
       status: 'loading',
       warnings:[], 
