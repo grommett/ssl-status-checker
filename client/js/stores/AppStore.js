@@ -4,7 +4,7 @@ var objectAssign = require('object-assign');
 
 var pages = links.map(function(link) {
   return {
-    url: link.url,
+    url: link.Page_URL,
     report: {
       status: 'loading',
       warnings:[], 
@@ -40,7 +40,6 @@ AppStore = {
       var pageURL = payload.data.pageURL;
       state.pages.map(function(page) {
         if(page.url === pageURL) {
-          console.log('dispatcher ', payload);
           page.report = payload.data.report;
         }
       });

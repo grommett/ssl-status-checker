@@ -2,6 +2,7 @@ var express = require('express');
 var app = express();
 var mixedContent = require('./index');
 var spreadsheetURL = 'https://docs.google.com/spreadsheets/d/1sN0uGj5JNtvhU76X9NZ2gkU5rxzAMcEMA_dXnj0L5x8/pubhtml';
+//var spreadsheetURL = 'https://docs.google.com/spreadsheets/d/12-ARShvjA11cYLHMfU_SK0A0ZNngJm6iXZN4NEJtHDo/pubhtml';
 var tabletop = require('tabletop');
 var assetParser = require('./asset-parser');
 
@@ -26,7 +27,7 @@ app.get('/', function (req, res) {
 app.get('/api/:url', function (req, res) {
   //assetParser
   assetParser(req.params.url, function(link, data) {
-    res.json(data);
+    res.json({url: link, data: data});
   }, function(e) {
     res.json(e);
   })

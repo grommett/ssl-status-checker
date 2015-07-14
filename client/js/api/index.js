@@ -7,6 +7,7 @@ var que = require('../libs/que');
  * after it's queried the Google spreadheet. Adds the links array values to the que.
 */
 links.map(function(link) {
+  console.log('adding: ', link);
   que.add(link);
 })
 
@@ -18,18 +19,32 @@ links.map(function(link) {
 */
 function query() {
   var queItem = que.next();
-  if(queItem) {
-    qwest.get(endPoint+encodeURIComponent(queItem.url))
+  while(queItem) {
+    var url = queItem.url;
+    qwest.get(endPoint+encodeURIComponent(queItem.Page_URL))
     .then(function(response) {
-      apiActions.response({pageURL: queItem.url, report: response});
-      query();
+      console.log('async url ', response.url);
+      apiActions.response({pageURL: response.url, report: response.data});
     })
     .catch(function(e, response) {
       console.log('>> Error: ', e, '\nResponse: ', response);
     })
-  }else{
-    console.log('Done!');
+    queItem = que.next();
   }
+  console.log('Done request!');
+  // var queItem = que.next();
+  // if(queItem) {
+  //   qwest.get(endPoint+encodeURIComponent(queItem.url))
+  //   .then(function(response) {
+  //     apiActions.response({pageURL: queItem.url, report: response});
+  //     query();
+  //   })
+  //   .catch(function(e, response) {
+  //     console.log('>> Error: ', e, '\nResponse: ', response);
+  //   })
+  // }else{
+  //   console.log('Done!');
+  // }
 }
 
 

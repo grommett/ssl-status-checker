@@ -38,6 +38,7 @@ var que = require('../libs/que');
  * after it's queried the Google spreadheet. Adds the links array values to the que.
 */
 links.map(function(link) {
+  console.log('adding: ', link);
   que.add(link);
 })
 
@@ -49,18 +50,32 @@ links.map(function(link) {
 */
 function query() {
   var queItem = que.next();
-  if(queItem) {
-    qwest.get(endPoint+encodeURIComponent(queItem.url))
+  while(queItem) {
+    var url = queItem.url;
+    qwest.get(endPoint+encodeURIComponent(queItem.Page_URL))
     .then(function(response) {
-      apiActions.response({pageURL: queItem.url, report: response});
-      query();
+      console.log('async url ', response.url);
+      apiActions.response({pageURL: response.url, report: response.data});
     })
     .catch(function(e, response) {
       console.log('>> Error: ', e, '\nResponse: ', response);
     })
-  }else{
-    console.log('Done!');
+    queItem = que.next();
   }
+  console.log('Done request!');
+  // var queItem = que.next();
+  // if(queItem) {
+  //   qwest.get(endPoint+encodeURIComponent(queItem.url))
+  //   .then(function(response) {
+  //     apiActions.response({pageURL: queItem.url, report: response});
+  //     query();
+  //   })
+  //   .catch(function(e, response) {
+  //     console.log('>> Error: ', e, '\nResponse: ', response);
+  //   })
+  // }else{
+  //   console.log('Done!');
+  // }
 }
 
 
@@ -111,7 +126,6 @@ Status = React.createClass({displayName: "Status",
   },
 
   _onChange: function(d) {
-    console.log('state changed! ', d);
     this.setState(d);
   }
 })
@@ -240,7 +254,6 @@ var objectAssign = require('object-assign');
 
 objectAssign(FluxDispatcher.prototype, {
   handleAPIresponse: function(response) {
-    console.log('handleAPIresponse');
     this.dispatch(response)
   },
 
@@ -328,7 +341,7 @@ var objectAssign = require('object-assign');
 
 var pages = links.map(function(link) {
   return {
-    url: link.url,
+    url: link.Page_URL,
     report: {
       status: 'loading',
       warnings:[], 
@@ -364,7 +377,6 @@ AppStore = {
       var pageURL = payload.data.pageURL;
       state.pages.map(function(page) {
         if(page.url === pageURL) {
-          console.log('dispatcher ', payload);
           page.report = payload.data.report;
         }
       });

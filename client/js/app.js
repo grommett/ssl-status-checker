@@ -34,7 +34,6 @@ Status = React.createClass({
   },
 
   _onChange: function(d) {
-    console.log('state changed! ', d);
     this.setState(d);
   }
 })
