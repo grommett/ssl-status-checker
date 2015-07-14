@@ -5,6 +5,7 @@ var spreadsheetURL = 'https://docs.google.com/spreadsheets/d/1sN0uGj5JNtvhU76X9N
 //var spreadsheetURL = 'https://docs.google.com/spreadsheets/d/12-ARShvjA11cYLHMfU_SK0A0ZNngJm6iXZN4NEJtHDo/pubhtml';
 var tabletop = require('tabletop');
 var assetParser = require('./asset-parser');
+var port = process.env.PORT || 3000;
 
 app.set('view engine', 'jade');
 app.set('views', __dirname +'/views');
@@ -35,7 +36,7 @@ app.get('/api/:url', function (req, res) {
 
 module.exports = {
   start: function() {
-    var server = app.listen(3000, function () {
+    var server = app.listen(port, function () {
     var host = server.address().address;
     var port = server.address().port;
     console.log('App listening at http://%s:%s', host, port);
