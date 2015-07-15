@@ -4,7 +4,7 @@
   "description": "Utility that tests for mixed content in HTML.",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
+    "test": "mocha",
     "css": "mkdir -p ./server/public/css && stylus ./client/stylus/app.styl -o ./server/public/css",
     "browserify": "mkdir -p ./server/public/js/ && browserify -t reactify ./client/js/app.js -o ./server/public/js/app.js",
     "browserify:build": "mkdir -p ./server/public/js/ && browserify -t reactify ./client/js/app.js | uglifyjs > ./server/public/js/app.js -cm",
@@ -27,11 +27,12 @@
   },
   "devDependencies": {
     "browserify": "^10.2.4",
-    "reactify": "^1.1.1",
-    "stylus": "^0.51.1",
-    "uglifyjs": "^2.4.10",
+    "flux": "^2.0.3",
+    "mocha": "^2.2.5",
     "object-assign": "^3.0.0",
     "qwest": "^1.7.0",
-    "flux": "^2.0.3"
+    "reactify": "^1.1.1",
+    "stylus": "^0.51.1",
+    "uglifyjs": "^2.4.10"
   }
 }

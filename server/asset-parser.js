@@ -47,12 +47,4 @@ function getAssetLinks(str) {
   return urls;
 }
 
-function defaultResponse() {
-  return {
-    link: '',
-    links: [],
-    mixedContent: false,
-  }
-}
-
-module.exports = assetParser;
+module.exports =  assetParser;

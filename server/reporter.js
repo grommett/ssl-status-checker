@@ -1,5 +1,10 @@
-
+/*
+ * TODO Would be really cool to make this a command line tool
+ * @{links} - array An array of links
+ * @{statusCode} number A status code from the response
+*/
 function jsonReport(links, statusCode) {
+  // Default report
   var report = {
     warnings: [],
     failing: [],
@@ -8,11 +13,15 @@ function jsonReport(links, statusCode) {
     statusCode: statusCode
   };
 
+  /*
+   * Filter links array and put them in the 
+   * appropriate (warn, fail, uncategorized) report array
+  */
   links.filter(function(link) {
     if(link.indexOf('http://') !== -1) return true
     return false;
   })
-  .map(function(link){
+  .forEach(function(link){
     if(isImage(link)) {
      report.warnings.push(link);
     }else if(isCSSorJS(link)){
