@@ -12,20 +12,24 @@
     "js": "npm run browserify && npm run js:vendor",
     "js:build": "npm run browserify:build && npm run js:vendor"
   },
+  "engines": {
+      "node": "0.10.26",
+      "npm": "2.1.9"
+  } 
   "author": "",
   "license": "ISC",
   "dependencies": {
     "express": "^4.13.0",
-    "flux": "^2.0.3",
     "jade": "^1.11.0",
-    "object-assign": "^3.0.0",
-    "qwest": "^1.7.0",
     "tabletop": "^1.4.2"
   },
   "devDependencies": {
     "browserify": "^10.2.4",
     "reactify": "^1.1.1",
     "stylus": "^0.51.1",
-    "uglifyjs": "^2.4.10"
+    "uglifyjs": "^2.4.10",
+    "object-assign": "^3.0.0",
+    "qwest": "^1.7.0",
+    "flux": "^2.0.3"
   }
 }
