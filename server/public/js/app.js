@@ -131,7 +131,7 @@ var StatusHeader = React.createClass({displayName: "StatusHeader",
     return (
       React.createElement("div", {className: "status-header"}, 
         "Checking Status for ", this.props.pages.length, " links.", 
-        ' '+loaded + ' page(s) loaded. '+Math.floor((loaded/this.props.pages.length)*100)+'% loaded.', 
+        ' '+loaded + ' page(s) loaded.', 
         React.createElement("br", null), this._getCount('passing')+' passing.', 
         React.createElement("br", null), this._getCount('failing')+' failing.', 
         React.createElement("br", null), this._getCount('warning')+' warnings.'

@@ -4,7 +4,7 @@ var StatusHeader = React.createClass({
     return (
       <div className="status-header">
         Checking Status for {this.props.pages.length} links.
-        {' '+loaded + ' page(s) loaded. '+Math.floor((loaded/this.props.pages.length)*100)+'% loaded.'}
+        {' '+loaded + ' page(s) loaded.'}
         <br />{this._getCount('passing')+' passing.'}
         <br />{this._getCount('failing')+' failing.'}
         <br />{this._getCount('warning')+' warnings.'}
